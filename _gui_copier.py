@@ -209,11 +209,11 @@ class _GuiCopier(QMainWindow):
             print("err 1s")
             return
 
+        # Clear console content
+        self._fake_console.clear()
+
         # Lauch copy or move
         for root, dires, files in os.walk(src):
-            # Clear console content
-            self._fake_console.clear()
-
             # Filter files
             if self._extensions and len(self._extensions):
                 subjects = [item for item in files if Path(item).suffix.lower() in self._extensions or Path(item).suffix in self._extensions]
