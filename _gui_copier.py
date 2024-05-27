@@ -1,6 +1,7 @@
 import os.path
 import shutil
 import sys
+from pathlib import Path
 
 from PyQt5.QtCore import QObject, pyqtSignal, QRunnable, QThreadPool
 from PyQt5.QtGui import QIcon
@@ -213,8 +214,14 @@ class _GuiCopier(QMainWindow):
             # Clear console content
             self._fake_console.clear()
 
+            # Filter files
+            if self._extensions and len(self._extensions):
+                subjects = [item for item in files if Path(item).suffix.lower() in self._extensions or Path(item).suffix in self._extensions]
+            else:
+                subjects = files
+
             # Create the worker
-            _copyer = _CopyerWorker(files, root, dst, copying)
+            _copyer = _CopyerWorker(subjects, root, dst, copying)
             _copyer.signals.progress.connect(self._update_bar)
             if copying:
                 _copyer.signals.copied.connect(self._update_console)
@@ -232,7 +239,6 @@ class _GuiCopier(QMainWindow):
         self._execute()
 
     def _update_bar(self, value: int):
-        print("Here")
         self._progress_bar.setValue(value)
 
     def _perform_move(self):
@@ -251,11 +257,11 @@ class _GuiCopier(QMainWindow):
         app = QApplication(sys.argv)
 
         # Load stylesheet
-        try:
-            with open("style.qss", "r") as stylesheet:
-                app.setStyleSheet(stylesheet.read())
-        except Exception:
-            print("Can't load stylesheet")
+        # try:
+        #     with open("style.qss", "r") as stylesheet:
+        #         app.setStyleSheet(stylesheet.read())
+        # except Exception:
+        #     print("Can't load stylesheet")
 
         # Instantiate our object and show it
         # By defauld all QWidget is not shown
