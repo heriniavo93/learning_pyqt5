@@ -192,7 +192,7 @@ class _GuiCopier(QMainWindow):
         # Add it as permanent widget
         self.statusBar().addPermanentWidget(self._progress_bar)
 
-        # This is simply to show the bar
+        # Show the bar
         self._progress_bar.setGeometry(30, 40, 200, 25)
 
     def _get_extensions(self, value):
